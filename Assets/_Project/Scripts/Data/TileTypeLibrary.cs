@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace TripleMatchFrenzy.Core
+namespace TripleMatchFrenzy.Data
 {
     /// <summary>Pairs a tile type with the sprite used to render it.</summary>
     [Serializable]

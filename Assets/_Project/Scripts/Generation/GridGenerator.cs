@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using TripleMatchFrenzy.Core;
 using Random = System.Random;
+using TripleMatchFrenzy.Data;
 
 namespace TripleMatchFrenzy.Generation
 {

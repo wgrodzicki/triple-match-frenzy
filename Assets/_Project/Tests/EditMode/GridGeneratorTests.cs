@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using TripleMatchFrenzy.Core;
 using TripleMatchFrenzy.Generation;
+using TripleMatchFrenzy.Data;
 
 namespace TripleMatchFrenzy.Tests
 {

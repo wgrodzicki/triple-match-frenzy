@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TripleMatchFrenzy.Core
+namespace TripleMatchFrenzy.Data
 {
     /// <summary>Pure data representation of a single tile on the board.</summary>
     public class TileData

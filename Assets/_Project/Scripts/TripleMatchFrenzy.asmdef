@@ -1,7 +1,9 @@
 {
     "name": "TripleMatchFrenzy",
     "rootNamespace": "TripleMatchFrenzy",
-    "references": [],
+    "references": [
+        "Unity.InputSystem"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
