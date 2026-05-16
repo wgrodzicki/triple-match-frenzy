@@ -67,7 +67,11 @@
       "mcp__unity-mcp__manage_packages",
       "mcp__unity-mcp__refresh_unity",
       "PowerShell(cmd /c \"dir /s /b `\"C:\\\\Users\\\\Acer\\\\repos\\\\Triple Match Frenzy\\\\Library\\\\PackageCache\\\\com.unity.nuget.newtonsoft-json@4dfd81071c64`\"\")",
-      "mcp__unity-mcp__execute_menu_item"
+      "mcp__unity-mcp__execute_menu_item",
+      "mcp__unity-mcp__manage_asset",
+      "mcp__unity-mcp__create_script",
+      "mcp__unity-mcp__run_tests",
+      "mcp__unity-mcp__get_test_job"
     ],
     "additionalDirectories": [
       "c:\\Users\\Acer\\repos\\Triple Match Frenzy"
