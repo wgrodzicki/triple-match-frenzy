@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__unity-mcp__Unity_GetConsoleLogs",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Acer\\\\.claude\\\\\" | Where-Object { $_.Name -match \"mcp\" })",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\Acer\\\\AppData\\\\Roaming\\\\\" | Where-Object { $_.Name -match -join\\(\"claude\",\"Code\",\"anthropic\"\\) })"
+    ]
+  }
+}
