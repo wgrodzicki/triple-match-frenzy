@@ -54,6 +54,17 @@ namespace TripleMatchFrenzy.Tray
         public TrayClonePool Pool => _pool;
 
         /// <summary>
+        /// Returns true if the tray currently contains 3 or more tiles of the same type,
+        /// meaning a match is still achievable without adding new tiles.
+        /// </summary>
+        public bool HasPotentialMatch()
+        {
+            return _entries
+                .GroupBy(e => e.Type)
+                .Any(g => g.Count() >= 3);
+        }
+
+        /// <summary>
         /// Called by GameManager when a tile is selected.
         /// Spawns a UI clone at the tile's screen position and returns it together with the
         /// world-space target position of the next free slot so TweenController can animate the move.

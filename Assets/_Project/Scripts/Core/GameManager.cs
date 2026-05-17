@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using TripleMatchFrenzy.Data;
 using TripleMatchFrenzy.Generation;
 using TripleMatchFrenzy.Tweening;
+using TripleMatchFrenzy.UI;
 using TripleMatchFrenzy.Views;
 
 namespace TripleMatchFrenzy.Core
@@ -30,6 +31,9 @@ namespace TripleMatchFrenzy.Core
 
         [SerializeField]
         private TweenController _tweenController;
+
+        [SerializeField]
+        private EndGameUI _endGameUI;
 
         [SerializeField]
         private float _tileSize = 1f;
@@ -180,7 +184,20 @@ namespace TripleMatchFrenzy.Core
                 await _tweenController.AnimateTrayCollapse(moves);
             }
 
-            // TODO: Check win/lose
+            if (CheckWin())
+            {
+                CurrentState = GameState.Won;
+                _endGameUI.ShowWin();
+                return;
+            }
+
+            if (CheckLose())
+            {
+                CurrentState = GameState.Lost;
+                _endGameUI.ShowLose();
+                return;
+            }
+
             CurrentState = GameState.Idle;
         }
 
@@ -190,6 +207,20 @@ namespace TripleMatchFrenzy.Core
             {
                 view.UpdateOcclusionVisual();
             }
+        }
+
+        private bool CheckWin()
+        {
+            return _allTiles.All(t => !t.gameObject.activeSelf);
+        }
+
+        private bool CheckLose()
+        {
+            if (!_tray.IsFull)
+            {
+                return false;
+            }
+            return !_tray.HasPotentialMatch();
         }
     }
 }
