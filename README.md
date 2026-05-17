@@ -5,6 +5,8 @@ A Unity implementation of the core mechanics of a triple-match puzzle game, insp
 
 ![Gameplay Screenshot](gameplay.gif)
 
+You can play the game on Itch.io [here](https://wgrodzicki.itch.io/triple-match-frenzy).
+
 ---
 
 ## Gameplay
