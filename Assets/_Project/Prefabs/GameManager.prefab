@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3071402177074161979}
   - component: {fileID: 1244950806152648098}
+  - component: {fileID: 8096202150691269384}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -47,6 +48,25 @@ MonoBehaviour:
   _tileLibrary: {fileID: 11400000, guid: 0fdb7ced355772d49ba6af0aa6df2232, type: 2}
   _tilePrefab: {fileID: 7935470762438899727, guid: 4884b84b7e065514ab305f57c09d30ed, type: 3}
   _tray: {fileID: 0}
+  _tweenController: {fileID: 8096202150691269384}
   _tileSize: 1
   _rowCount: 6
-  _boardCenter: {x: 0, y: 0}
+  _boardCenter: {x: 0, y: -0.8}
+--- !u!114 &8096202150691269384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6845480819490293636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29d607ae2bd92b142a8fb285e6a5b80e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: TripleMatchFrenzy::TripleMatchFrenzy.Tweening.TweenController
+  _tileToTrayDuration: 0.25
+  _trayCollapseDuration: 0.15
+  _matchRemoveDuration: 0.2
+  _tileToTrayEase: 9
+  _trayCollapseEase: 9
+  _matchRemoveEase: 8

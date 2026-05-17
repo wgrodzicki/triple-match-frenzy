@@ -2,7 +2,9 @@
     "name": "TripleMatchFrenzy",
     "rootNamespace": "TripleMatchFrenzy",
     "references": [
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "UniTask",
+        "UniTask.DOTween"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

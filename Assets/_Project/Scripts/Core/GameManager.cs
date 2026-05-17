@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TripleMatchFrenzy.Data;
 using TripleMatchFrenzy.Generation;
+using TripleMatchFrenzy.Tweening;
 using TripleMatchFrenzy.Views;
 
 namespace TripleMatchFrenzy.Core
@@ -25,6 +27,9 @@ namespace TripleMatchFrenzy.Core
 
         [SerializeField]
         private TripleMatchFrenzy.Tray.Tray _tray;
+
+        [SerializeField]
+        private TweenController _tweenController;
 
         [SerializeField]
         private float _tileSize = 1f;
@@ -108,7 +113,7 @@ namespace TripleMatchFrenzy.Core
 
                 TileView view = go.GetComponent<TileView>();
                 view.Initialize(tileData, _tileLibrary);
-                view.OnSelected += OnTileSelected;
+                view.OnSelected += tile => OnTileSelected(tile).Forget();
                 _allTiles.Add(view);
             }
 
@@ -151,27 +156,40 @@ namespace TripleMatchFrenzy.Core
         }
 
         // -----------------------------------------------------------------------
-        // Tile callbacks (stub — full implementation in next prompt)
+        // Tile callbacks
         // -----------------------------------------------------------------------
 
-        private void OnTileSelected(TileView tile)
+        private async UniTaskVoid OnTileSelected(TileView tileView)
         {
             CurrentState = GameState.Animating;
-            tile.Hide();
+            tileView.Hide();
 
-            _occlusionGraph.OnTileRemoved(tile.Data);
-            _allTiles.Remove(tile);
+            _occlusionGraph.OnTileRemoved(tileView.Data);
+            _allTiles.Remove(tileView);
+            UpdateAllSelectableVisuals();
 
+            (RectTransform clone, Vector2 targetPos) = _tray.TryAddTile(tileView);
+            await _tweenController.AnimateTileToTray(clone, targetPos);
+
+            List<RectTransform> matchedClones = _tray.TryMatch();
+            if (matchedClones != null && matchedClones.Count == 3)
+            {
+                await _tweenController.AnimateMatchRemove(matchedClones, _tray.Pool);
+
+                List<(RectTransform clone, Vector2 targetPosition)> moves = _tray.CollapseSlots();
+                await _tweenController.AnimateTrayCollapse(moves);
+            }
+
+            // TODO: Check win/lose
+            CurrentState = GameState.Idle;
+        }
+
+        private void UpdateAllSelectableVisuals()
+        {
             foreach (TileView view in _allTiles)
             {
                 view.UpdateOcclusionVisual();
             }
-
-            _tray.TryAddTile(tile);
-            _tray.TryMatch();
-
-            // Temporary — will be moved to tween callbacks in the next prompt.
-            CurrentState = GameState.Idle;
         }
     }
 }

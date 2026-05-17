@@ -50,27 +50,23 @@ namespace TripleMatchFrenzy.Tray
         /// <summary>True if all 7 slots are occupied.</summary>
         public bool IsFull => _entries.Count >= _slots.Length;
 
+        /// <summary>The clone pool owned by this tray, exposed so GameManager can pass it to TweenController.</summary>
+        public TrayClonePool Pool => _pool;
+
         /// <summary>
         /// Called by GameManager when a tile is selected.
-        /// Spawns a UI clone at the tile's canvas-space position then snaps it to the next free slot.
-        /// The initial canvas position is preserved so TweenController can animate from it next prompt.
-        /// Returns false if the tray is already full.
+        /// Spawns a UI clone at the tile's screen position and returns it together with the
+        /// world-space target position of the next free slot so TweenController can animate the move.
         /// </summary>
-        public bool TryAddTile(TileView tileView)
+        public (RectTransform clone, Vector2 targetPosition) TryAddTile(TileView tileView)
         {
-            if (IsFull)
-            {
-                return false;
-            }
-
             Vector3 screenPos = Camera.main.WorldToScreenPoint(tileView.transform.position);
 
             GameObject clone = _pool.Get(transform);
             RectTransform cloneRect = clone.GetComponent<RectTransform>();
             cloneRect.sizeDelta = new Vector2(_cloneSize, _cloneSize);
 
-            // Opt out of the HorizontalLayoutGroup so the clone overlays the slot rather than
-            // becoming a new row item.
+            // Opt out of HorizontalLayoutGroup so the clone overlays the slot image.
             LayoutElement layoutElement = clone.GetComponent<LayoutElement>();
             if (layoutElement == null)
             {
@@ -78,15 +74,14 @@ namespace TripleMatchFrenzy.Tray
             }
             layoutElement.ignoreLayout = true;
 
-            // Place at tile's screen position (start point for TweenController next prompt).
+            // Start at the tile's screen position — TweenController animates from here.
             cloneRect.position = new Vector3(screenPos.x, screenPos.y, 0f);
 
             Image cloneImage = clone.GetComponent<Image>();
             cloneImage.sprite = tileView.IconRenderer.sprite;
 
-            // Snap to slot via world-space position so anchor/pivot differences don't matter.
             int slotIndex = _entries.Count;
-            cloneRect.position = _slots[slotIndex].position;
+            Vector2 targetPosition = _slots[slotIndex].position;
 
             _entries.Add(new TrayEntry { Type = tileView.Data.Type, CloneObject = clone });
 
@@ -95,15 +90,16 @@ namespace TripleMatchFrenzy.Tray
                 OnTrayFull?.Invoke();
             }
 
-            return true;
+            return (cloneRect, targetPosition);
         }
 
         /// <summary>
-        /// Scans the tray for 3 tiles of the same type and removes them.
-        /// Calls <see cref="CollapseSlots"/> and fires <see cref="OnMatchFound"/> if a match is found.
+        /// Scans the tray for 3 tiles of the same type and removes them from the entry list.
+        /// Returns the matched clones' RectTransforms so GameManager can pass them to
+        /// TweenController for the removal animation. Returns null if no match is found.
+        /// Pool return is handled by TweenController after the animation completes.
         /// </summary>
-        /// <returns>True if a match was found and removed.</returns>
-        public bool TryMatch()
+        public List<RectTransform> TryMatch()
         {
             foreach (TileType type in Enum.GetValues(typeof(TileType)))
             {
@@ -113,28 +109,34 @@ namespace TripleMatchFrenzy.Tray
                     continue;
                 }
 
+                List<RectTransform> clones = new();
                 foreach (TrayEntry entry in matches)
                 {
-                    _pool.Return(entry.CloneObject);
+                    clones.Add(entry.CloneObject.GetComponent<RectTransform>());
                     _entries.Remove(entry);
                 }
 
-                CollapseSlots();
                 OnMatchFound?.Invoke();
-                return true;
+                return clones;
             }
 
-            return false;
+            return null;
         }
 
-        /// <summary>Repositions remaining clones to fill any gaps left to right.</summary>
-        public void CollapseSlots()
+        /// <summary>
+        /// Builds the list of moves needed to collapse remaining clones into consecutive slots.
+        /// Returns (clone, targetWorldPosition) pairs without moving anything — GameManager
+        /// passes this to TweenController to animate.
+        /// </summary>
+        public List<(RectTransform clone, Vector2 targetPosition)> CollapseSlots()
         {
+            var moves = new List<(RectTransform, Vector2)>();
             for (int i = 0; i < _entries.Count; i++)
             {
                 RectTransform cloneRect = _entries[i].CloneObject.GetComponent<RectTransform>();
-                cloneRect.position = _slots[i].position;
+                moves.Add((cloneRect, _slots[i].position));
             }
+            return moves;
         }
 
         // -----------------------------------------------------------------------
