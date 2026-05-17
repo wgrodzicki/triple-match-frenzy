@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using TripleMatchFrenzy.Core;
 using Random = System.Random;
 using TripleMatchFrenzy.Data;
 

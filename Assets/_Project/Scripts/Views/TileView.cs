@@ -85,15 +85,15 @@ namespace TripleMatchFrenzy.Views
             bool isSelectable = Data.Blockers.Count == 0;
             ApplyOcclusionColor(_backgroundRenderer, isSelectable);
             ApplyOcclusionColor(_foregroundRenderer, isSelectable);
-            ApplyOcclusionColor(_iconRenderer, isSelectable, isSelectable ? float.MaxValue : 0.5f);
+            ApplyOcclusionColor(_iconRenderer, isSelectable, isSelectable ? null : 0.5f);
         }
 
-        private void ApplyOcclusionColor(SpriteRenderer renderer, bool isSelectable, float alpha = float.MaxValue)
+        private void ApplyOcclusionColor(SpriteRenderer renderer, bool isSelectable, float? alphaOverride = null)
         {
             Color def = _defaultColors[renderer];
             renderer.color = isSelectable
                 ? def
-                : new Color(def.r - _darkeningGrade, def.g - _darkeningGrade, def.b - _darkeningGrade, alpha == float.MaxValue ? def.a : alpha);
+                : new Color(def.r - _darkeningGrade, def.g - _darkeningGrade, def.b - _darkeningGrade, alphaOverride ?? def.a);
         }
 
         /// <summary>

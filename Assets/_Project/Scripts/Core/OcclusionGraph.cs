@@ -21,7 +21,7 @@ namespace TripleMatchFrenzy.Core
         /// </summary>
         /// <param name="allTiles">
         /// The authoritative list of all tiles across all layers.
-        /// The caller is responsible for removing tiles from this list when they are taken.
+        /// <see cref="OnTileRemoved"/> keeps this list current as tiles leave the board.
         /// </param>
         /// <param name="tileSize">World-space side length of a single tile cell.</param>
         public void Build(List<TileData> allTiles, float tileSize)

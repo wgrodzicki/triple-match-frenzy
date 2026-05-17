@@ -12,7 +12,7 @@ namespace TripleMatchFrenzy.Tray
     public class TrayEntry
     {
         public TileType Type;
-        public GameObject CloneObject;
+        public RectTransform Clone;
     }
 
     /// <summary>
@@ -71,6 +71,12 @@ namespace TripleMatchFrenzy.Tray
         /// </summary>
         public (RectTransform clone, Vector2 targetPosition) TryAddTile(TileView tileView)
         {
+            if (IsFull)
+            {
+                Debug.LogWarning("[Tray] TryAddTile called on a full tray.");
+                return (null, Vector2.zero);
+            }
+
             Vector3 screenPos = Camera.main.WorldToScreenPoint(tileView.transform.position);
 
             GameObject clone = _pool.Get(transform);
@@ -94,7 +100,7 @@ namespace TripleMatchFrenzy.Tray
             int slotIndex = _entries.Count;
             Vector2 targetPosition = _slots[slotIndex].position;
 
-            _entries.Add(new TrayEntry { Type = tileView.Data.Type, CloneObject = clone });
+            _entries.Add(new TrayEntry { Type = tileView.Data.Type, Clone = cloneRect });
 
             if (IsFull)
             {
@@ -123,7 +129,7 @@ namespace TripleMatchFrenzy.Tray
                 List<RectTransform> clones = new();
                 foreach (TrayEntry entry in matches)
                 {
-                    clones.Add(entry.CloneObject.GetComponent<RectTransform>());
+                    clones.Add(entry.Clone);
                     _entries.Remove(entry);
                 }
 
@@ -144,8 +150,7 @@ namespace TripleMatchFrenzy.Tray
             var moves = new List<(RectTransform, Vector2)>();
             for (int i = 0; i < _entries.Count; i++)
             {
-                RectTransform cloneRect = _entries[i].CloneObject.GetComponent<RectTransform>();
-                moves.Add((cloneRect, _slots[i].position));
+                moves.Add((_entries[i].Clone, _slots[i].position));
             }
             return moves;
         }

@@ -213,7 +213,7 @@ namespace TripleMatchFrenzy.Core
 
         private bool CheckWin()
         {
-            return _allTiles.All(t => !t.gameObject.activeSelf);
+            return _allTiles.Count == 0;
         }
 
         private bool CheckLose()

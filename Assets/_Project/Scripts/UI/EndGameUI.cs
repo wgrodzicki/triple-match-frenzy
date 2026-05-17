@@ -17,6 +17,8 @@ namespace TripleMatchFrenzy.UI
         [SerializeField]
         private GameObject _overlayRoot;
 
+        private CanvasGroup _canvasGroup;
+
         // -----------------------------------------------------------------------
         // Public API
         // -----------------------------------------------------------------------
@@ -41,6 +43,13 @@ namespace TripleMatchFrenzy.UI
 
         private void Awake()
         {
+            if (_overlayRoot == null)
+            {
+                Debug.LogError("[EndGameUI] _overlayRoot is not assigned.", this);
+                return;
+            }
+
+            _canvasGroup = _overlayRoot.GetComponent<CanvasGroup>();
             _overlayRoot.SetActive(false);
         }
 
@@ -52,11 +61,10 @@ namespace TripleMatchFrenzy.UI
         {
             _overlayRoot.SetActive(true);
 
-            CanvasGroup canvasGroup = _overlayRoot.GetComponent<CanvasGroup>();
-            if (canvasGroup != null)
+            if (_canvasGroup != null)
             {
-                canvasGroup.alpha = 0f;
-                DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, 1f, 0.4f)
+                _canvasGroup.alpha = 0f;
+                DOTween.To(() => _canvasGroup.alpha, x => _canvasGroup.alpha = x, 1f, 0.4f)
                     .SetEase(Ease.OutCubic);
             }
         }
