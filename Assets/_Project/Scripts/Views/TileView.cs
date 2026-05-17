@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TripleMatchFrenzy.Data;
 using UnityEngine;
 
@@ -50,6 +51,8 @@ namespace TripleMatchFrenzy.Views
         /// </summary>
         public Action<TileView> OnSelected;
 
+        private Dictionary<SpriteRenderer, Color> _defaultColors = new();
+
         /// <summary>
         /// Assigns the tile's data model, looks up its icon from the sprite library,
         /// and sets the sorting orders of all three renderers based on the tile's layer index.
@@ -66,6 +69,29 @@ namespace TripleMatchFrenzy.Views
             _backgroundRenderer.sortingOrder = baseOrder;
             _foregroundRenderer.sortingOrder = baseOrder + 1;
             _iconRenderer.sortingOrder = baseOrder + 2;
+
+            _defaultColors[_backgroundRenderer] = _backgroundRenderer.color;
+            _defaultColors[_foregroundRenderer] = _foregroundRenderer.color;
+            _defaultColors[_iconRenderer] = _iconRenderer.color;
+
+            UpdateOcclusionVisual();
+        }
+
+        public void UpdateOcclusionVisual()
+        {
+            bool isSelectable = Data.Blockers.Count == 0;
+            ApplyOcclusionColor(_backgroundRenderer, isSelectable);
+            ApplyOcclusionColor(_foregroundRenderer, isSelectable);
+            ApplyOcclusionColor(_iconRenderer, isSelectable);
+        }
+
+        private void ApplyOcclusionColor(SpriteRenderer renderer, bool isSelectable)
+        {
+            const float DarkeningGrade = 0.05f;
+            Color def = _defaultColors[renderer];
+            renderer.color = isSelectable
+                ? def
+                : new Color(def.r - DarkeningGrade, def.g - DarkeningGrade, def.b - DarkeningGrade, def.a);
         }
 
         /// <summary>

@@ -73,6 +73,7 @@ namespace TripleMatchFrenzy.Core
                     other.RemoveBlocker(tile);
                 }
             }
+            _allTiles.Remove(tile);
         }
 
         // Converts a grid address to a world-space centre, applying the half-tile stagger

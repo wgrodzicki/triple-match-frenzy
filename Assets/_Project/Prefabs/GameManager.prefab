@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: TripleMatchFrenzy::TripleMatchFrenzy.Core.GameManager
   _tileLibrary: {fileID: 11400000, guid: 0fdb7ced355772d49ba6af0aa6df2232, type: 2}
   _tilePrefab: {fileID: 7935470762438899727, guid: 4884b84b7e065514ab305f57c09d30ed, type: 3}
+  _tray: {fileID: 0}
   _tileSize: 1
   _rowCount: 6
   _boardCenter: {x: 0, y: 0}

@@ -71,7 +71,12 @@
       "mcp__unity-mcp__manage_asset",
       "mcp__unity-mcp__create_script",
       "mcp__unity-mcp__run_tests",
-      "mcp__unity-mcp__get_test_job"
+      "mcp__unity-mcp__get_test_job",
+      "mcp__unity-mcp__manage_scene",
+      "mcp__unity-mcp__manage_gameobject",
+      "mcp__unity-mcp__manage_components",
+      "mcp__unity-mcp__execute_code",
+      "mcp__unity-mcp__manage_script"
     ],
     "additionalDirectories": [
       "c:\\Users\\Acer\\repos\\Triple Match Frenzy"

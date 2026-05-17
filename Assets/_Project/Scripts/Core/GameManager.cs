@@ -24,6 +24,9 @@ namespace TripleMatchFrenzy.Core
         private GameObject _tilePrefab;
 
         [SerializeField]
+        private TripleMatchFrenzy.Tray.Tray _tray;
+
+        [SerializeField]
         private float _tileSize = 1f;
 
         [SerializeField]
@@ -141,7 +144,7 @@ namespace TripleMatchFrenzy.Core
                 .OrderByDescending(view => view.Data.LayerIndex)
                 .FirstOrDefault();
 
-            if (topTile != null && topTile.Data.IsSelectable)
+            if (topTile != null && topTile.Data.IsSelectable && !_tray.IsFull)
             {
                 topTile.OnSelected?.Invoke(topTile);
             }
@@ -153,8 +156,22 @@ namespace TripleMatchFrenzy.Core
 
         private void OnTileSelected(TileView tile)
         {
-            Debug.Log($"[GameManager] Selected: {tile.Data.Type} " +
-                      $"layer={tile.Data.LayerIndex} pos={tile.Data.GridPosition}");
+            CurrentState = GameState.Animating;
+            tile.Hide();
+
+            _occlusionGraph.OnTileRemoved(tile.Data);
+            _allTiles.Remove(tile);
+
+            foreach (TileView view in _allTiles)
+            {
+                view.UpdateOcclusionVisual();
+            }
+
+            _tray.TryAddTile(tile);
+            _tray.TryMatch();
+
+            // Temporary — will be moved to tween callbacks in the next prompt.
+            CurrentState = GameState.Idle;
         }
     }
 }
