@@ -5,6 +5,9 @@
         "Unity.InputSystem",
         "UniTask",
         "UniTask.DOTween",
+        "UniTask.Addressables",
+        "Unity.Addressables",
+        "Unity.ResourceManager",
         "Unity.TextMeshPro"
     ],
     "includePlatforms": [],

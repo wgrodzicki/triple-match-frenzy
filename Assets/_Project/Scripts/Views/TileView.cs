@@ -26,6 +26,9 @@ namespace TripleMatchFrenzy.Views
         [SerializeField]
         private BoxCollider2D _collider;
 
+        [SerializeField]
+        private float _darkeningGrade = 0.05f;
+
         // -----------------------------------------------------------------------
         // Public API
         // -----------------------------------------------------------------------
@@ -82,16 +85,15 @@ namespace TripleMatchFrenzy.Views
             bool isSelectable = Data.Blockers.Count == 0;
             ApplyOcclusionColor(_backgroundRenderer, isSelectable);
             ApplyOcclusionColor(_foregroundRenderer, isSelectable);
-            ApplyOcclusionColor(_iconRenderer, isSelectable);
+            ApplyOcclusionColor(_iconRenderer, isSelectable, isSelectable ? float.MaxValue : 0.5f);
         }
 
-        private void ApplyOcclusionColor(SpriteRenderer renderer, bool isSelectable)
+        private void ApplyOcclusionColor(SpriteRenderer renderer, bool isSelectable, float alpha = float.MaxValue)
         {
-            const float DarkeningGrade = 0.05f;
             Color def = _defaultColors[renderer];
             renderer.color = isSelectable
                 ? def
-                : new Color(def.r - DarkeningGrade, def.g - DarkeningGrade, def.b - DarkeningGrade, def.a);
+                : new Color(def.r - _darkeningGrade, def.g - _darkeningGrade, def.b - _darkeningGrade, alpha == float.MaxValue ? def.a : alpha);
         }
 
         /// <summary>

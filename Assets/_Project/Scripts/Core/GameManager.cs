@@ -7,6 +7,7 @@ using TripleMatchFrenzy.Data;
 using TripleMatchFrenzy.Generation;
 using TripleMatchFrenzy.Tweening;
 using TripleMatchFrenzy.UI;
+using TripleMatchFrenzy.Utility;
 using TripleMatchFrenzy.Views;
 
 namespace TripleMatchFrenzy.Core
@@ -18,16 +19,14 @@ namespace TripleMatchFrenzy.Core
     /// </summary>
     public class GameManager : MonoBehaviour
     {
-        // TODO: Replace with Addressables
         [SerializeField]
-        private TileTypeLibrary _tileLibrary;
-
-        // TODO: Replace with Addressables
-        [SerializeField]
-        private GameObject _tilePrefab;
+        private AddressablesLoader _loader;
 
         [SerializeField]
         private TripleMatchFrenzy.Tray.Tray _tray;
+
+        private GameObject _tilePrefab;
+        private TileTypeLibrary _tileLibrary;
 
         [SerializeField]
         private TweenController _tweenController;
@@ -80,9 +79,14 @@ namespace TripleMatchFrenzy.Core
             _allTiles = new List<TileView>();
         }
 
-        private void Start()
+        private async UniTaskVoid Start()
         {
+            CurrentState = GameState.Loading;
+            await _loader.LoadAsync();
+            _tilePrefab = _loader.TilePrefab;
+            _tileLibrary = _loader.TileLibrary;
             SpawnBoard();
+            CurrentState = GameState.Idle;
         }
 
         private void Update()
@@ -120,8 +124,6 @@ namespace TripleMatchFrenzy.Core
                 view.OnSelected += tile => OnTileSelected(tile).Forget();
                 _allTiles.Add(view);
             }
-
-            CurrentState = GameState.Idle;
         }
 
         // -----------------------------------------------------------------------
