@@ -14,7 +14,7 @@ You can play a desktop version of the game on Itch.io [here](https://wgrodzicki.
 - Tiles are arranged across **3 stacked grid layers** with a half-tile offset between layers,
   creating a partial occlusion effect
 - Only **unoccluded tiles** (not covered by tiles on higher layers) are selectable
-- Selected tiles move into a **7-slot tray** at the bottom of the screen
+- Selected tiles move into a **7-slot tray** at the top of the screen
 - When **3 matching tiles** land in the tray they are automatically removed
 - **Win** by clearing all tiles from the board
 - **Lose** if the tray fills up with no matching triple possible
@@ -32,7 +32,7 @@ The project is structured around clean separation of concerns and single-respons
 | `TileView` | MonoBehaviour per tile; owns 3 SpriteRenderers (background, foreground, icon); sorting order bands per grid layer; no input logic |
 | `GameManager` | Singleton; owns the game state machine (Loading → Idle → Animating → Checking → Won/Lost); coordinates all systems; async flow via UniTask |
 | `Tray` | 7-slot UI tray; manages UI clone spawning, pooling, match detection, and slot collapse |
-| `TrayClonePool` | Object pool for UI Image clones; initial size 21 (3 matches worth) |
+| `TrayClonePool` | Object pool for UI Image clones |
 | `TweenController` | All DoTween calls centralized here; exposes awaitable UniTask methods; no game logic |
 | `AddressablesLoader` | Async loads Tile prefab and TileTypeLibrary SO via Addressables on startup; releases handles on destroy |
 | `EndGameUI` | TMP overlay activated on win/lose; fades in via DoTween |
@@ -77,28 +77,6 @@ After importing DoTween, run the setup wizard via **Tools > Demigiant > DOTween 
 Add the following under **Edit > Project Settings > Player > Other Settings > Scripting Define Symbols**:
 ```
 UNITASK_DOTWEEN_SUPPORT
-```
-
----
-
-## Project Structure
-
-```
-Assets/
-└── _Project/
-    ├── Data/
-    │   ├── ScriptableObjects/   # TileTypeLibrary asset
-    │   └── TileLibraries/
-    ├── Prefabs/                 # Tile, TrayClone prefabs
-    ├── Scenes/
-    ├── Scripts/
-    │   ├── Core/                # GameManager, TileView, OcclusionGraph, data models
-    │   ├── Generation/          # GridGenerator
-    │   ├── Tray/                # Tray, TrayClonePool
-    │   ├── Tweening/            # TweenController
-    │   ├── UI/                  # EndGameUI
-    │   └── Utility/             # AddressablesLoader
-    └── Sprites/
 ```
 
 ---
