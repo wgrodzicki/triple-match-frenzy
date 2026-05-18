@@ -5,7 +5,7 @@ A Unity implementation of the core mechanics of a triple-match puzzle game, insp
 
 ![Gameplay Screenshot](gameplay.gif)
 
-You can play the game on Itch.io [here](https://wgrodzicki.itch.io/triple-match-frenzy).
+You can play a desktop version of the game on Itch.io [here](https://wgrodzicki.itch.io/triple-match-frenzy).
 
 ---
 
@@ -114,7 +114,7 @@ This project was built using a deliberate AI-assisted workflow. Here is a transp
 ### Workflow
 The implementation was split into three phases:
 
-**Phase 1 — Initial architecture, design and techniques ideas**
+**Phase 1 — Initial architecture, design and technique ideas**
 
 This was an initial phase where I thought about the best architectural approaches, broad design decisions as well as techniques/algorithms to use before consulting it with the AI.
 
